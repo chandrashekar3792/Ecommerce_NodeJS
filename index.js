@@ -2,6 +2,8 @@
  const morgan=require('morgan');
  var mongoose=require('mongoose');
  var bodyParser=require('body-parser');
+ var ejs=require('ejs');
+ var ejs_mate=require('ejs-mate');
  // const mongoose=require('mongoose');
 var User = require('./models/user');
  const app =express();
@@ -16,6 +18,8 @@ var User = require('./models/user');
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.engine('ejs',ejs_mate);
+app.set('view engine','ejs');
 app.post('/create-user',function(req,res){
   var user = new User();
   user.profile.name=req.body.name;
@@ -27,10 +31,10 @@ app.post('/create-user',function(req,res){
     }
   })
 })
-app.get('/',function(req,res) {
-  var name='Chandru';
-  res.json('my name is'+name);
-});
+
+app.get('/',function(req,res){
+  res.render('home');
+})
  app.listen(3000,function(err){
    if(!err){
      console.log('Server is running at localhost:3000');
